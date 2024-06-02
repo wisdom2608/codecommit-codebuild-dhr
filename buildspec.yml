@@ -1,0 +1,24 @@
+#Build and Push a docker image to a Docker hub repository using codebuild with codecommit as a source provider.
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: latest
+
+  pre_build:
+    commands:
+      - echo Logging in to Docker Hub...
+      - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t your_image_name .
+      - docker tag your_image_name:latest $DOCKERHUB_USERNAME/your_image_name:latest
+
+  post_build:
+    commands:
+      - echo Pushing the Docker image to Docker Hub...
+      - docker push $DOCKERHUB_USERNAME/your_image_name:latest
+

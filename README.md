@@ -1,11 +1,11 @@
 # codecommit-codebuild-dhr
 To build and push a Docker image to Docker Hub using AWS CodeCommit, you'll need to follow a series of steps involving setting up repositories, configuring pipelines, and using AWS CodeBuild for the build and push process. Here's a detailed guide:
 
-Prerequisites
-a)- AWS Account: Ensure you have an AWS account.
-b)- Docker Hub Account: You need an account on Docker Hub to store your Docker images.
-c)- AWS CLI: Make sure the AWS CLI is installed and configured.
-d)- Docker: Ensure Docker is installed and running on your local machine for testing purposes.
+Prerequisites:
+    a)- AWS Account: Ensure you have an AWS account.
+    b)- Docker Hub Account: You need an account on Docker Hub to store your Docker images.
+    c)- AWS CLI: Make sure the AWS CLI is installed and configured.
+    d)- Docker: Ensure Docker is installed and running on your local machine for testing purposes.
 
 #Step-by-Step Guide
 
@@ -148,7 +148,7 @@ B)- Update CodeBuild Project to Use Secrets:
    ii)- Under "Environment variables", add:
        . Name: DOCKERHUB_USERNAME.
        . Value: Use the AWS Secrets Manager reference (e.g., secretsmanager:arn:aws:secretsmanager:<region>:<account-id>:secret:dockerhub-creds:DOCKERHUB_USERNAME).
-       
+
     iii)- Add another environment variable:
        . Name: DOCKERHUB_PASSWORD.
        . Value: Use the AWS Secrets Manager reference (e.g., secretsmanager:arn:aws:secretsmanager:<region>:<account-id>:secret:dockerhub-creds:DOCKERHUB_PASSWORD).

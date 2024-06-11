@@ -30,6 +30,7 @@ cd <your-repo-name>
 Step 2: Prepare Your Docker Project
 A)- Create a Dockerfile:
   . In your repository directory, create a Dockerfile with your Docker build instructions.
+  
 ---
   # Example Dockerfile
 FROM node:14
@@ -38,6 +39,7 @@ COPY . .
 RUN npm install
 CMD ["node", "app.js"]
 ---
+
 B)- Create a buildspec.yml File:
   . This file will instruct AWS CodeBuild on how to build and push your Docker image.
 ---

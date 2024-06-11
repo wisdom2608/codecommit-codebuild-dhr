@@ -1,3 +1,82 @@
+# codecommit-codebuild-dhr
+To build and push a Docker image to Docker Hub using AWS CodeCommit, you'll need to follow a series of steps involving setting up repositories, configuring pipelines, and using AWS CodeBuild for the build and push process. Here's a detailed guide:
+
+Prerequisites:
+    a)- AWS Account: Ensure you have an AWS account.
+    b)- Docker Hub Account: You need an account on Docker Hub to store your Docker images.
+    c)- AWS CLI: Make sure the AWS CLI is installed and configured.
+    d)- Docker: Ensure Docker is installed and running on your local machine for testing purposes.
+
+#Step-by-Step Guide
+
+Step 1: Create an AWS CodeCommit Repository
+
+A)- Navigate to AWS CodeCommit:
+  . Go to the AWS Management Console.
+  . Open the CodeCommit service.
+
+B)-  Create a Repository:
+
+  . Click on "Create repository".
+  . Provide a name and description for the repository.
+  . Click "Create".
+
+C)- Clone the Repository Locally:
+
+git clone https://git-codecommit.<region>.amazonaws.com/v1/repos/<your-repo-name>
+cd <your-repo-name>
+
+
+Step 2: Prepare Your Docker Project
+A)- Create a Dockerfile:
+  . In your repository directory, create a Dockerfile with your Docker build instructions.
+
+  # Example Dockerfile
+---
+FROM node:14
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD ["node", "app.js"]
+---
+
+B)- Create a buildspec.yml File:
+  . This file will instruct AWS CodeBuild on how to build and push your Docker image.
+---
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Docker Hub...
+      - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t <your-dockerhub-username>/<your-repo-name>:latest .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push <your-dockerhub-username>/<your-repo-name>:latest
+
+cache:
+  paths:
+    - '/root/.cache'
+---
+
+Replace <your-dockerhub-username> and <your-repo-name> with your Docker Hub username and the name of your Docker repository respectively.
+
+C)- Add and Commit the Files:
+---
+git add Dockerfile buildspec.yml
+git commit -m "Added Dockerfile and buildspec.yml"
+git push origin main
+---
+
+Step 3: Create an AWS CodeBuild Project
+
 A)- Navigate to AWS CodeBuild:
   . Go to the AWS Management Console.
   . Open the CodeBuild service.
@@ -81,3 +160,7 @@ Conclusion
 By following these steps, you'll set up a CI/CD pipeline that builds and pushes Docker images to Docker Hub from an AWS CodeCommit repository. AWS CodeBuild handles the build and push process, while AWS CodePipeline automates the workflow.
 
 This setup allows you to automate the deployment of Docker images, making your development and release process more efficient and reliable.
+
+
+      
+
